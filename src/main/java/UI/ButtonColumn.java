@@ -123,7 +123,7 @@ public class ButtonColumn extends AbstractCellEditor
         {
             button.setForeground(table.getForeground());
             if(row%2==0){
-                button.setBackground(ViewManager.appColors[0]);
+                button.setBackground(Constants.appColors[0]);
             }else{
                 button.setBackground(UIManager.getColor("Button.background"));
             }

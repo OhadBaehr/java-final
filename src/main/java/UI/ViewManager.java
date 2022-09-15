@@ -7,25 +7,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Vector;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 public class ViewManager {
     public static JFrame f;
 
-    public static final Color[] appColors = {
-            new Color(42, 46, 48),
-            new Color(56, 61, 63),
-            new Color(77, 81, 84)
-    };
+
 
     public static void initStyles() {
         System.setProperty("sun.java2d.uiScale", "1");
-        UIManager.put("control", appColors[1]);
+        UIManager.put("control", Constants.appColors[1]);
         UIManager.put("info", new Color(128, 128, 128));
-        UIManager.put("nimbusBase", appColors[0]);
+        UIManager.put("nimbusBase", Constants.appColors[0]);
         UIManager.put("nimbusAlertYellow", new Color(248, 187, 0));
         UIManager.put("nimbusDisabledText", new Color(128, 128, 128));
         UIManager.put("nimbusFocus", new Color(115, 164, 209));
-        UIManager.put("nimbusGreen", appColors[1]);
+        UIManager.put("nimbusGreen", Constants.appColors[1]);
         UIManager.put("nimbusInfoBlue", new Color(66, 139, 221));
         UIManager.put("nimbusLightBackground", new Color(42, 46, 48));
         UIManager.put("nimbusOrange", new Color(191, 98, 4));
@@ -57,7 +56,7 @@ public class ViewManager {
         f = new JFrame("Button Example");
 //    f.setExtendedState(JFrame.MAXIMIZED_BOTH);
 //      f.setUndecorated(true); // <-- the title bar is removed here
-        f.setMinimumSize(new Dimension(600, 600));
+        f.setMinimumSize(new Dimension(700, 700));
 //        f.setLayout(null);
 //        f.setLocationByPlatform(true);
 ////        f.pack();
@@ -70,6 +69,7 @@ public class ViewManager {
             f.getContentPane().removeAll();
             f.revalidate();
             f.repaint();
+            f.setVisible(false);
         } else {
             initFrame();
         }
@@ -79,8 +79,7 @@ public class ViewManager {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 cleanUp();
-
-
+                System.out.println("MAAAA");
 
                 ///////// date picker
                 JButton dateFilterButton = ButtonFactory.createButton("calendar");
@@ -88,33 +87,32 @@ public class ViewManager {
                 JTextField dateFilterTextField = new JTextField("03/07/2014 - 03/07/2014");
                 dateFilterTextField.setEditable(false);
                 dateFilterTextField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-                dateFilterTextField.setFont(new Font("Courier", Font.BOLD, 16));
-                dateFilterTextField.setBackground(appColors[1]);
+                dateFilterTextField.setFont(Constants.font);
+                dateFilterTextField.setBackground(Constants.appColors[1]);
 
                 JPanel dateFilterPanel = new JPanel();
                 dateFilterPanel.add(dateFilterButton);
                 dateFilterPanel.add(dateFilterTextField);
 
 
-
-
                 ///////// category name
                 JTextField categoryNameTextField = new JTextField("Category Name");
                 categoryNameTextField.setPreferredSize(new Dimension(200, 35));
-                categoryNameTextField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+                categoryNameTextField.setBorder(BorderFactory.createEmptyBorder(5, 8, 5, 0));
                 categoryNameTextField.setEditable(false);
-                categoryNameTextField.setFont(new Font("Courier", Font.BOLD, 16));
-                categoryNameTextField.setBackground(appColors[1]);
+                categoryNameTextField.setFont(Constants.font);
+                categoryNameTextField.setBackground(Constants.appColors[1]);
                 categoryNameTextField.addFocusListener(new FocusAdapter() {
                     @Override
                     public void focusLost(FocusEvent e) {
                         categoryNameTextField.setEditable(false);
-                        categoryNameTextField.setBackground(appColors[1]);
+                        categoryNameTextField.setBackground(Constants.appColors[1]);
                         categoryNameTextField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
                     }
                 });
 
                 JButton editCategoryNameButton = ButtonFactory.createButton("edit");
+                editCategoryNameButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 0));
                 editCategoryNameButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -123,7 +121,7 @@ public class ViewManager {
                                 BorderFactory.createLineBorder(Color.white),
                                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
                         categoryNameTextField.requestFocus(true);
-                        categoryNameTextField.setBackground(appColors[0]);
+                        categoryNameTextField.setBackground(Constants.appColors[0]);
                     }
                 });
 
@@ -132,36 +130,12 @@ public class ViewManager {
                 categoryNamePanel.add(categoryNameTextField);
 
 
-
-
-
-                ///////// add listings
-                JButton addTableRowButton = ButtonFactory.createButton(appColors[0], "add");
-                addTableRowButton.setBounds(0, 0, 60, 60);
-                addTableRowButton.setPreferredSize(new Dimension(45, 35));
-
-
-
-
-                ///////// topnav
-                JPanel topnav = new JPanel();
-                topnav.setLayout(new BorderLayout());
-                topnav.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-                topnav.add(dateFilterPanel, BorderLayout.LINE_START);
-                topnav.add(categoryNamePanel, BorderLayout.CENTER);
-                topnav.add(addTableRowButton, BorderLayout.LINE_END);
-
-
-
-
                 ///////// table
                 JPanel p = new JPanel();
                 p.setLayout(new BorderLayout());
-
-                p.setBackground(appColors[0]);
+                p.setBackground(Constants.appColors[0]);
                 JTable table = TableFactory.createTable();
                 JScrollPane scrollPane = new JScrollPane(table);
-
                 scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
                     @Override
                     protected JButton createDecreaseButton(int orientation) {
@@ -172,7 +146,6 @@ public class ViewManager {
                             }
                         };
                     }
-
                     @Override
                     protected JButton createIncreaseButton(int orientation) {
                         return  new JButton(){
@@ -184,31 +157,86 @@ public class ViewManager {
                     }
                     @Override
                     protected void configureScrollBarColors() {
-                        this.trackColor=appColors[1];
-                        this.thumbColor = appColors[2];
+                        this.trackColor=Constants.appColors[1];
+                        this.thumbColor = Constants.appColors[2];
                     }
                 });
                 p.add(scrollPane);
 
 
+                ///////// add listings
+                JButton addTableRowButton = ButtonFactory.createButton(Constants.appColors[0], "add");
+                addTableRowButton.setText("Add Expense");
+                addTableRowButton.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 15));
+                addTableRowButton.setFont(Constants.font);
+                addTableRowButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        DefaultTableModel model = (DefaultTableModel) table.getModel();
+                        ViewManager.addExpenseView();
+//                        model.insertRow(0,new Object[]{"", "", "", "", ""});
+                    }
+                });
+
+
+
+
+                ///////// topnav
+                JPanel topnav = new JPanel();
+                topnav.setLayout(new BorderLayout());
+                topnav.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+                topnav.add(dateFilterPanel, BorderLayout.LINE_START);
+                topnav.add(addTableRowButton, BorderLayout.LINE_END);
+
+
+
+                ///////// categories
+                String categories[] = { "Jalpaiguri", "Mumbai", "Noida", "Kolkata", "New Delhi" };
+                JComboBox  categoriesComboBox = ComboBoxFactory.createComboBox(categories);
+
+
+
+                JPanel header = new JPanel();
+                header.setLayout(new BorderLayout());
+                header.add(categoryNamePanel, BorderLayout.LINE_START);
+                header.add(categoriesComboBox, BorderLayout.LINE_END);
+                header.setBorder(BorderFactory.createEmptyBorder(10, 0, 2, 0));
+                header.setBackground(Constants.appColors[0]);
 
                 ///////// layout
                 JPanel layout = new JPanel();
                 layout.setLayout(new GridLayout(2, 3));
-                JButton button = new JButton("Button 1 (PAGE_START)");
-                layout.add(button);
+                layout.add(header);
                 layout.add(topnav);
 
 
 
                 ///////// summary
-                JLabel sum=new JLabel("$300");
+                JButton summaryOpenButton=ButtonFactory.createButton(Constants.appColors[0],"report");
+                summaryOpenButton.setText("View Report");
+                summaryOpenButton.setFont(Constants.font);
+                summaryOpenButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 15));
 
+
+                ///////// delete category
+                JButton deleteCategoryButton=ButtonFactory.createButton(Constants.appColors[0],"x");
+                deleteCategoryButton.setText("Delete Category");
+                deleteCategoryButton.setFont(Constants.font);
+                deleteCategoryButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 15));
+
+
+
+                ///////// footer
+                JPanel footer = new JPanel();
+                footer.setLayout(new BorderLayout());
+                footer.add(summaryOpenButton, BorderLayout.LINE_START);
+                footer.add(deleteCategoryButton, BorderLayout.LINE_END);
+                footer.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
 
                 Container pane = f.getContentPane();
                 pane.add(layout, BorderLayout.PAGE_START);
                 pane.add(p, BorderLayout.CENTER);
-                pane.add(sum, BorderLayout.PAGE_END);
+                pane.add(footer, BorderLayout.PAGE_END);
 
                 f.setLocationByPlatform(true);
                 f.pack();
@@ -247,6 +275,106 @@ public class ViewManager {
                         label.setText(data);
                     }
                 });
+            }
+        });
+    }
+
+    public static void addExpenseView() {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                cleanUp();
+
+                JLabel label = new JLabel("Add Expense");
+                label.setHorizontalAlignment(JLabel.CENTER);
+                label.setFont(Constants.font);
+
+                JPanel header = new JPanel();
+                header.setLayout(new BorderLayout());
+                header.add(label,BorderLayout.CENTER);
+                header.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
+
+
+
+
+
+
+//
+                /////// Date
+                String now = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+                JTextField dateTextField=new JTextField(now);
+                dateTextField.setFont(Constants.font);
+                dateTextField.setBackground(Constants.appColors[3]);
+                dateTextField.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+                dateTextField.setPreferredSize(new Dimension(300,50));
+                JLabel dateLabel=new JLabel("Date",IconFactory.createIcon("calendar"),JLabel.CENTER);
+                dateLabel.setFont(Constants.font);
+                dateLabel.setOpaque(true);
+                dateLabel.setBackground(Constants.appColors[1]);
+                dateLabel.setPreferredSize(new Dimension(100,46));
+
+                JPanel datePanel=new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+                datePanel.add(dateLabel);
+                datePanel.add(dateTextField);
+                datePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+                datePanel.setBackground(Constants.appColors[0]);
+
+
+
+                /////// amount
+                JTextField amountTextField=new JTextField("0");
+                amountTextField.setFont(Constants.font);
+                amountTextField.setBackground(Constants.appColors[3]);
+                amountTextField.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+                amountTextField.setPreferredSize(new Dimension(300,50));
+                JLabel amountLabel=new JLabel("Date",IconFactory.createIcon("transfer"),JLabel.CENTER);
+                amountLabel.setFont(Constants.font);
+                amountLabel.setOpaque(true);
+                amountLabel.setBackground(Constants.appColors[1]);
+                amountLabel.setPreferredSize(new Dimension(100,46));
+
+                JPanel amountPanel=new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+                amountPanel.add(amountLabel);
+                amountPanel.add(amountTextField);
+                amountPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+                amountPanel.setBackground(Constants.appColors[0]);
+
+
+
+                /////// description
+                JTextArea descriptionTextField=new JTextArea("0");
+                descriptionTextField.setFont(Constants.font);
+                descriptionTextField.setBackground(Constants.appColors[3]);
+                descriptionTextField.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                JLabel descriptionLabel=new JLabel("Description",IconFactory.createIcon("words"),JLabel.CENTER);
+                descriptionLabel.setFont(Constants.font);
+                descriptionLabel.setOpaque(true);
+                descriptionLabel.setBackground(Constants.appColors[1]);
+                descriptionLabel.setPreferredSize(new Dimension(100,46));
+
+                JPanel descriptionPanel=new JPanel(new BorderLayout());
+                descriptionPanel.add(descriptionLabel, BorderLayout.PAGE_START);
+                descriptionPanel.add(descriptionTextField, BorderLayout.CENTER);
+                descriptionPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+                descriptionPanel.setBackground(Constants.appColors[0]);
+
+
+
+                JPanel form = new JPanel();
+                form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
+                form.setBackground(Constants.appColors[0]);
+                form.add(datePanel);
+                form.add(amountPanel);
+                form.add(descriptionPanel);
+
+                Container pane = f.getContentPane();
+                pane.add(header, BorderLayout.PAGE_START);
+                pane.add(form, BorderLayout.CENTER);
+
+                f.setLocationByPlatform(true);
+                f.pack();
+                f.setVisible(true);
+//
+//                pane.add(footer, BorderLayout.PAGE_END);
             }
         });
     }

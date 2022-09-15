@@ -20,13 +20,13 @@ public class ButtonFactory {
         return b;
     }
     public static JButton createButton(String icon){
-        JButton b=new JButton(new ImageIcon(System.getProperty("user.dir")+"/images/"+ icon + ".png"));
+        JButton b=new JButton(IconFactory.createIcon(icon));
 //        b.setBounds(x,100,40, 40);
         setupButton(b);
         return b;
     }
     public static JButton createButton(Color color, String icon){
-        JButton b=new JButton(new ImageIcon(System.getProperty("user.dir")+"/images/"+ icon + ".png"));
+        JButton b=new JButton(IconFactory.createIcon(icon));
 //        b.setBounds(x,100,40, 40);
         setupButton(b,color);
         return b;

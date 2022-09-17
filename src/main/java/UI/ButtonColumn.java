@@ -1,3 +1,5 @@
+// Taken from opensource and slightly modified
+
 package UI;
 
 import java.awt.*;
@@ -17,7 +19,6 @@ import javax.swing.table.*;
  *  button. When the button is invoked the provided Action is invoked. The
  *  source of the Action will be the table. The action command will contain
  *  the model row number of the button that was clicked.
- *
  */
 public class ButtonColumn extends AbstractCellEditor
         implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener

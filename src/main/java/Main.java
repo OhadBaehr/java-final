@@ -1,4 +1,4 @@
-import UI.ButtonFactory;
+import App.AppState;
 import UI.ViewManager;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -13,9 +13,8 @@ import java.awt.geom.AffineTransform;
 
 public class Main {
     public static void main(String[] args) {
+        AppState.initDefaultState();
         ViewManager.initStyles();
-
-//        ViewManager.loginView();
-        ViewManager.appView();
+        ViewManager.loginView();
     }
 }
